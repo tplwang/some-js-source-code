@@ -18,7 +18,7 @@ function throttle(fn, threshhold) {
     return function() {
         var context = this;
         var args = arguments;
-        var now = new Date();
+        var now = +new Date();
         if (last && now < last + threshold) {
             clearTimeout(timer);
             timer = setTimeout(function() {
@@ -28,6 +28,27 @@ function throttle(fn, threshhold) {
         } else {
             last = now;
             fn.apply(context, args)
+        }
+    }
+}
+
+// enhance debounce&throttle
+function throttle(fn, delay) {
+    let last = 0, timer = null;
+
+    return function() {
+        let context = this;
+        let args = arguments;
+        let now = +new Date();
+        if (now - last < delay) {
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                last = now;
+                fn.apply(context, args);
+            }, delay);
+        } else {
+            last = now;
+            fn.apply(context, args);
         }
     }
 }
